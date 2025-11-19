@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react'; // ADD useEffect here
 import { Upload, Mic2, Play, Pause, Download, AlertCircle, FileText, Loader2 } from 'lucide-react';
 import { generateSpeech } from '../services/gemini';
 
@@ -11,6 +11,11 @@ export const AudiobookStudio: React.FC = () => {
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   
+  useEffect(() => {
+    console.log('All env vars:', import.meta.env);
+    console.log('Gemini key exists?', !!import.meta.env.VITE_GEMINI_API_KEY);
+  }, []);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -38,7 +43,7 @@ export const AudiobookStudio: React.FC = () => {
     if (!text) return;
     setIsLoading(true);
     setAudioUrl(null);
-
+    
     try {
       // In a real app, we would chunk this text because TTS APIs have limits.
       // For this demo, we take the first 1000 chars to avoid timeouts/limits.
@@ -54,7 +59,7 @@ export const AudiobookStudio: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }; // <-- ADD THIS CLOSING BRACE
 
   return (
     <div className="max-w-4xl mx-auto animate-fade-in space-y-8">

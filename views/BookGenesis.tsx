@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ChevronRight, ChevronLeft, Wand2, Save, RefreshCw, FileDown, 
   Loader2, Edit3, Book, Sparkles, MoreHorizontal, Image as ImageIcon,
   CheckCircle2, AlertCircle, Palette, Paintbrush, Gamepad2, Type
-} from 'lucide-react';
+} from 'lucide-react';  // <-- Add this closing brace and from statement
 import { useProjectStore } from '../store';
-import { generateOutline, generateChapterContent, rewriteTextSelection, generateImageSuggestion, generateActualImage } from '../services/gemini';
+import { generateOutline, generateChapterContent, rewriteTextSelection,
 import { BookProject, Chapter, ProjectType } from '../types';
 
 export const BookGenesis: React.FC = () => {
@@ -15,6 +15,11 @@ export const BookGenesis: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
   
+  useEffect(() => {
+  console.log('All env vars:', import.meta.env);
+  console.log('Gemini key exists?', !!import.meta.env.VITE_GEMINI_API_KEY);
+}, []);
+
   // Step 1: Form State
   const [projectType, setProjectType] = useState<ProjectType>('standard');
   const [topic, setTopic] = useState('');
