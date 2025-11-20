@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react'; // Also add useRef here
 import { 
   ChevronRight, ChevronLeft, Wand2, Save, RefreshCw, FileDown, 
   Loader2, Edit3, Book, Sparkles, MoreHorizontal, Image as ImageIcon,
   CheckCircle2, AlertCircle, Palette, Paintbrush, Gamepad2, Type
-} from 'lucide-react';  // <-- Add this closing brace and from statement
+} from 'lucide-react';
 import { useProjectStore } from '../store';
-import { generateOutline, generateChapterContent, rewriteTextSelection,
+import { generateOutline, generateChapterContent, rewriteTextSelection, generateImageSuggestion, generateActualImage } from '../services/gemini';
 import { BookProject, Chapter, ProjectType } from '../types';
 
 export const BookGenesis: React.FC = () => {
