@@ -40,26 +40,29 @@ export const AudiobookStudio: React.FC = () => {
   };
 
   const handleGenerate = async () => {
-    if (!text) return;
-    setIsLoading(true);
-    setAudioUrl(null);
+  if (!text) return;
+  setIsLoading(true);
+  setAudioUrl(null);
+  
+  try {
+    const textToSpeak = text.length > 1000 ? text.substring(0, 1000) + "..." : text;
     
-    try {
-      // In a real app, we would chunk this text because TTS APIs have limits.
-      // For this demo, we take the first 1000 chars to avoid timeouts/limits.
-      const textToSpeak = text.length > 1000 ? text.substring(0, 1000) + "..." : text;
-      
-      const audioBuffer = await generateSpeech(textToSpeak, selectedVoice);
-      const blob = new Blob([audioBuffer], { type: 'audio/wav' });
-      const url = URL.createObjectURL(blob);
-      setAudioUrl(url);
-    } catch (e) {
-      console.error(e);
-      alert("Failed to generate audio. Please check API key.");
-    } finally {
-      setIsLoading(false);
-    }
-  }; // <-- ADD THIS CLOSING BRACE
+    const audioBuffer = await generateSpeech(textToSpeak, selectedVoice);
+    
+    // ❌ WRONG - Don't assume it's WAV
+    // const blob = new Blob([audioBuffer], { type: 'audio/wav' });
+    
+    // ✅ CORRECT - Use the actual format from Gemini (usually MP3 or PCM)
+    const blob = new Blob([audioBuffer], { type: 'audio/mpeg' }); // Try MP3 first
+    const url = URL.createObjectURL(blob);
+    setAudioUrl(url);
+  } catch (e) {
+    console.error(e);
+    alert("Failed to generate audio. Please check API key.");
+  } finally {
+    setIsLoading(false);
+  }
+};RACE
 
   return (
     <div className="max-w-4xl mx-auto animate-fade-in space-y-8">

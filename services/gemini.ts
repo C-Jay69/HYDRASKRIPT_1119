@@ -269,10 +269,16 @@ export const generateSpeech = async (text: string, voiceName: string): Promise<A
     },
   });
 
+  console.log('TTS Response:', response); // ADD THIS
+  
   const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+  const mimeType = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.mimeType; // ADD THIS
+  
+  console.log('Audio MIME type:', mimeType); // ADD THIS
+  console.log('Audio data length:', base64Audio?.length); // ADD THIS
+  
   if (!base64Audio) throw new Error("No audio data returned");
 
-  // Decode base64 to ArrayBuffer
   const binaryString = atob(base64Audio);
   const len = binaryString.length;
   const bytes = new Uint8Array(len);
